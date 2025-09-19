@@ -8,7 +8,7 @@ import com.github.kolesovv.aisle.domain.ItemRepository
 class ItemRepositoryImpl : ItemRepository {
 
     private val liveData = MutableLiveData<List<Item>>()
-    private val shopList = mutableListOf<Item>()
+    private val shopList = sortedSetOf<Item>({ o1, o2 -> o1.id.compareTo(o2.id) })
 
     private var autoIncrementId: Int = 0
 
@@ -42,7 +42,8 @@ class ItemRepositoryImpl : ItemRepository {
     }
 
     override fun getItem(id: Int): Item {
-        return shopList[id]
+        return shopList.find { it.id == id }
+            ?: throw RuntimeException("Element with id $id not found")
     }
 
     override fun updateItem(item: Item) {
