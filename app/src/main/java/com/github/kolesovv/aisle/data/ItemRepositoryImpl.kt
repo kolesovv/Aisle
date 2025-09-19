@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.github.kolesovv.aisle.domain.Item
 import com.github.kolesovv.aisle.domain.ItemRepository
+import kotlin.random.Random
 
 class ItemRepositoryImpl : ItemRepository {
 
@@ -13,12 +14,12 @@ class ItemRepositoryImpl : ItemRepository {
     private var autoIncrementId: Int = 0
 
     init {
-        repeat(10) {
+        repeat(1000) {
             addItem(
                 Item(
                     name = "Product $it",
                     count = 0,
-                    isEnable = false
+                    isEnable = Random.nextBoolean()
                 )
             )
         }
