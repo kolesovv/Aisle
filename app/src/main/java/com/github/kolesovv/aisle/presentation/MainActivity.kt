@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.github.kolesovv.aisle.R
 
@@ -21,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.shopList.observe(this) {
-            shopListAdapter.shopList = it
+            shopListAdapter.submitList(it)
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -43,5 +44,42 @@ class MainActivity : AppCompatActivity() {
             ShopListAdapter.VIEW_TYPE_DISABLE,
             ShopListAdapter.MAX_POOL_SIZE
         )
+        setupClickListener()
+        setupLongClickListener()
+        setupSwipeListener(recyclerView)
+    }
+
+    private fun setupSwipeListener(recyclerView: RecyclerView) {
+        val callback = object : ItemTouchHelper.SimpleCallback(
+            0, ItemTouchHelper.LEFT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(
+                viewHolder: RecyclerView.ViewHolder,
+                direction: Int
+            ) {
+                val item = shopListAdapter.currentList[viewHolder.adapterPosition]
+                viewModel.deleteItem(item)
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(callback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+    }
+
+    private fun setupLongClickListener() {
+        shopListAdapter.onShopItemLongClickListener = {
+            viewModel.changeEnableState(it)
+        }
+    }
+
+    private fun setupClickListener() {
+        shopListAdapter.onShopItemClickListener = { }
     }
 }
