@@ -9,7 +9,7 @@ import com.github.kolesovv.aisle.domain.usecase.UpdateItemUseCase
 
 class MainViewModel : ViewModel() {
 
-    private val itemRepository = ItemRepositoryImpl()
+    private val itemRepository = ItemRepositoryImpl
 
     private val getItemListUseCase = GetItemListUseCase(itemRepository)
     private val updateItemUseCase = UpdateItemUseCase(itemRepository)

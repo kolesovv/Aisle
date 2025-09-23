@@ -6,7 +6,7 @@ import com.github.kolesovv.aisle.domain.Item
 import com.github.kolesovv.aisle.domain.ItemRepository
 import kotlin.random.Random
 
-class ItemRepositoryImpl : ItemRepository {
+object ItemRepositoryImpl : ItemRepository {
 
     private val liveData = MutableLiveData<List<Item>>()
     private val shopList = sortedSetOf<Item>({ o1, o2 -> o1.id.compareTo(o2.id) })
@@ -14,7 +14,7 @@ class ItemRepositoryImpl : ItemRepository {
     private var autoIncrementId: Int = 0
 
     init {
-        repeat(1000) {
+        repeat(10) {
             addItem(
                 Item(
                     name = "Product $it",
