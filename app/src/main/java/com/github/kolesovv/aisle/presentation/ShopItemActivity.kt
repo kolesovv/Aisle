@@ -3,28 +3,15 @@ package com.github.kolesovv.aisle.presentation
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
-import androidx.core.widget.doBeforeTextChanged
-import androidx.lifecycle.ViewModelProvider
 import com.github.kolesovv.aisle.R
 import com.github.kolesovv.aisle.domain.Item
-import com.google.android.material.textfield.TextInputLayout
 
 class ShopItemActivity : AppCompatActivity() {
-
-    private lateinit var viewModel: ShopItemViewModel
-
-    private lateinit var tilName: TextInputLayout
-    private lateinit var tilCount: TextInputLayout
-    private lateinit var etName: EditText
-    private lateinit var etCount: EditText
-    private lateinit var saveButton: Button
 
     private var screenMode = MODE_UNKNOWN
     private var shopItemId = Item.UNDEFINED_ID
@@ -34,7 +21,7 @@ class ShopItemActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_shop_item)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.shop_item_container)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
             v.updatePadding(
@@ -47,11 +34,7 @@ class ShopItemActivity : AppCompatActivity() {
         }
 
         parseIntent()
-        viewModel = ViewModelProvider(this)[ShopItemViewModel::class.java]
-        initViews()
-        addTextChangeListeners()
         launchMode()
-        observeViewModel()
     }
 
     private fun parseIntent() {
@@ -71,74 +54,16 @@ class ShopItemActivity : AppCompatActivity() {
         }
     }
 
-    fun initViews() {
-        tilName = findViewById(R.id.til_name)
-        tilCount = findViewById(R.id.til_count)
-        etName = findViewById(R.id.et_name)
-        etCount = findViewById(R.id.et_count)
-        saveButton = findViewById(R.id.save_button)
-    }
-
-    private fun addTextChangeListeners() {
-        etName.doBeforeTextChanged { _, _, _, _ -> viewModel.resetErrorInputName() }
-        etCount.doBeforeTextChanged { _, _, _, _ -> viewModel.resetErrorInputCount() }
-    }
-
     private fun launchMode() {
-        when (screenMode) {
-            MODE_ADD -> launchAddMode()
-            MODE_EDIT -> launchEditMode()
-        }
-    }
-
-    private fun launchAddMode() {
-
-        saveButton.setOnClickListener {
-            viewModel.addItem(
-                etName.text?.toString(),
-                etCount.text?.toString()
-            )
-        }
-    }
-
-    private fun launchEditMode() {
-
-        viewModel.getItem(shopItemId)
-        viewModel.item.observe(this) {
-            etName.setText(it.name)
-            etCount.setText(it.count.toString())
+        val fragment = when (screenMode) {
+            MODE_ADD -> ShopItemFragment.newInstanceAddItem()
+            MODE_EDIT -> ShopItemFragment.newInstanceEditItem(shopItemId)
+            else -> throw RuntimeException("Param screen mode is absent")
         }
 
-        saveButton.setOnClickListener {
-            viewModel.updateItem(
-                etName.text?.toString(),
-                etCount.text?.toString()
-            )
-        }
-    }
-
-    private fun observeViewModel() {
-        viewModel.errorInputName.observe(this) {
-            val message = if (it) {
-                getString(R.string.error_input_name)
-            } else {
-                null
-            }
-            tilName.error = message
-        }
-
-        viewModel.errorInputCount.observe(this) {
-            val message = if (it) {
-                getString(R.string.error_input_count)
-            } else {
-                null
-            }
-            tilCount.error = message
-        }
-
-        viewModel.shouldCloseScreen.observe(this) {
-            finish()
-        }
+        supportFragmentManager.beginTransaction()
+            .add(R.id.shop_item_container, fragment)
+            .commit()
     }
 
     companion object {
