@@ -11,7 +11,7 @@ import androidx.core.view.updatePadding
 import com.github.kolesovv.aisle.R
 import com.github.kolesovv.aisle.domain.Item
 
-class ShopItemActivity : AppCompatActivity() {
+class ShopItemActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedListener {
 
     private var screenMode = MODE_UNKNOWN
     private var shopItemId = Item.UNDEFINED_ID
@@ -34,7 +34,9 @@ class ShopItemActivity : AppCompatActivity() {
         }
 
         parseIntent()
-        launchMode()
+        if (savedInstanceState == null) {
+            launchMode()
+        }
     }
 
     private fun parseIntent() {
@@ -62,8 +64,12 @@ class ShopItemActivity : AppCompatActivity() {
         }
 
         supportFragmentManager.beginTransaction()
-            .add(R.id.shop_item_container, fragment)
+            .replace(R.id.shop_item_container, fragment)
             .commit()
+    }
+
+    override fun onEditingFinished() {
+        finish()
     }
 
     companion object {
