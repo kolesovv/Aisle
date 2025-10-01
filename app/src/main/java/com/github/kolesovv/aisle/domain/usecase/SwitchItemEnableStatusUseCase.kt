@@ -2,9 +2,9 @@ package com.github.kolesovv.aisle.domain.usecase
 
 import com.github.kolesovv.aisle.domain.ItemRepository
 
-class DeleteItemUseCase(private val itemRepository: ItemRepository) {
+class SwitchItemEnableStatusUseCase(private val itemRepository: ItemRepository) {
 
     suspend fun invoke(itemId: Int) {
-        itemRepository.deleteItem(itemId)
+        itemRepository.switchItemEnableStatus(itemId)
     }
 }

@@ -3,6 +3,7 @@ package com.github.kolesovv.aisle.presentation
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -13,6 +14,7 @@ import com.github.kolesovv.aisle.domain.Item
 
 class ShopItemActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedListener {
 
+    private val TAG = "LifeCycle"
     private var screenMode = MODE_UNKNOWN
     private var shopItemId = Item.UNDEFINED_ID
 
@@ -69,6 +71,7 @@ class ShopItemActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinished
     }
 
     override fun onEditingFinished() {
+        Log.d(TAG, "onEditingFinished: ")
         finish()
     }
 

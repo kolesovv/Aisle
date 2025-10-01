@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
                 direction: Int
             ) {
                 val item = shopListAdapter.currentList[viewHolder.bindingAdapterPosition]
-                viewModel.deleteItem(item)
+                viewModel.deleteItem(item.id)
             }
         }
         val itemTouchHelper = ItemTouchHelper(callback)
@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
 
     private fun setupLongClickListener() {
         shopListAdapter.onShopItemLongClickListener = {
-            viewModel.changeEnableState(it)
+            viewModel.changeEnableState(it.id)
         }
     }
 

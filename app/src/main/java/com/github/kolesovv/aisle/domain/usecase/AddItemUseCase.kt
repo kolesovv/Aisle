@@ -5,7 +5,7 @@ import com.github.kolesovv.aisle.domain.ItemRepository
 
 class AddItemUseCase(private val itemRepository: ItemRepository) {
 
-    fun invoke(item: Item) {
+    suspend fun invoke(item: Item) {
         itemRepository.addItem(item)
     }
 }

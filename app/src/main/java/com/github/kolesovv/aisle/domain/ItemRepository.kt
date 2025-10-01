@@ -4,13 +4,15 @@ import androidx.lifecycle.LiveData
 
 interface ItemRepository {
 
-    fun addItem(item: Item)
-
-    fun deleteItem(item: Item)
-
     fun getAllItems(): LiveData<List<Item>>
 
-    fun getItem(id: Int): Item
+    suspend fun addItem(item: Item)
 
-    fun updateItem(item: Item)
+    suspend fun deleteItem(itemId: Int)
+
+    suspend fun getItem(itemId: Int): Item
+
+    suspend fun updateItem(item: Item)
+
+    suspend fun switchItemEnableStatus(itemId: Int)
 }
