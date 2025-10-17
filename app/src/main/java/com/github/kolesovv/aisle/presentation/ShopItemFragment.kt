@@ -2,6 +2,7 @@ package com.github.kolesovv.aisle.presentation
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,13 +11,19 @@ import android.widget.EditText
 import androidx.core.widget.doBeforeTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.github.kolesovv.aisle.AisleApp
 import com.github.kolesovv.aisle.R
 import com.github.kolesovv.aisle.domain.Item
+import com.github.kolesovv.aisle.presentation.screens.shopItem.ShopItemViewModel
 import com.google.android.material.textfield.TextInputLayout
+import javax.inject.Inject
+import kotlin.getValue
 
 class ShopItemFragment : Fragment() {
 
-    private lateinit var viewModel: ShopItemViewModel
+    private val TAG = "LifeCycle"
+
+    lateinit var viewModel: ShopItemViewModel
     private lateinit var onEditingFinishedListener: OnEditingFinishedListener
 
     private lateinit var tilName: TextInputLayout
@@ -28,7 +35,17 @@ class ShopItemFragment : Fragment() {
     private var screenMode = MODE_UNKNOWN
     private var shopItemId = Item.UNDEFINED_ID
 
+    @Inject
+    lateinit var viewmodelFactory: ViewModelFactory
+
+    private val component by lazy {
+        (requireActivity().application as AisleApp).component
+    }
+
     override fun onAttach(context: Context) {
+        component.inject(shopItemFragment = this)
+
+        Log.d(TAG, "onAttach")
         super.onAttach(context)
         if (context is OnEditingFinishedListener) {
             onEditingFinishedListener = context
@@ -38,6 +55,7 @@ class ShopItemFragment : Fragment() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d(TAG, "onCreate")
         super.onCreate(savedInstanceState)
         parseParams()
     }
@@ -47,16 +65,53 @@ class ShopItemFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.d(TAG, "onCreateView")
         return inflater.inflate(R.layout.fragment_shop_item, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Log.d(TAG, "onViewCreated")
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this)[ShopItemViewModel::class.java]
+        viewModel = ViewModelProvider(this, viewmodelFactory)[ShopItemViewModel::class.java]
         initViews(view)
         addTextChangeListeners()
         launchMode()
         observeViewModel()
+    }
+
+    override fun onStart() {
+        Log.d(TAG, "onStart")
+        super.onStart()
+    }
+
+    override fun onResume() {
+        Log.d(TAG, "onResume")
+        super.onResume()
+    }
+
+    override fun onPause() {
+        Log.d(TAG, "onPause")
+        super.onPause()
+    }
+
+    override fun onStop() {
+        Log.d(TAG, "onStop")
+        super.onStop()
+    }
+
+    override fun onDestroyView() {
+        Log.d(TAG, "onDestroyView")
+        super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        Log.d(TAG, "onDestroy")
+        super.onDestroy()
+    }
+
+    override fun onDetach() {
+        Log.d(TAG, "onDetach")
+        super.onDetach()
     }
 
     private fun parseParams() {

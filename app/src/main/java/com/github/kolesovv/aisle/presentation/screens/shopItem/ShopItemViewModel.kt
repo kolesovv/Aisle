@@ -1,24 +1,21 @@
-package com.github.kolesovv.aisle.presentation
+package com.github.kolesovv.aisle.presentation.screens.shopItem
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.kolesovv.aisle.data.ItemRepositoryImpl
 import com.github.kolesovv.aisle.domain.Item
 import com.github.kolesovv.aisle.domain.usecase.AddItemUseCase
 import com.github.kolesovv.aisle.domain.usecase.GetItemUseCase
 import com.github.kolesovv.aisle.domain.usecase.UpdateItemUseCase
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ShopItemViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val repository = ItemRepositoryImpl.getInstance(application)
-
-    private val addItemUseCase = AddItemUseCase(repository)
-    private val updateItemUseCase = UpdateItemUseCase(repository)
-    private val getItemUseCase = GetItemUseCase(repository)
+class ShopItemViewModel @Inject constructor(
+    private val addItemUseCase: AddItemUseCase,
+    private val updateItemUseCase: UpdateItemUseCase,
+    private val getItemUseCase: GetItemUseCase,
+) : ViewModel() {
 
     private val _errorInputName = MutableLiveData<Boolean>()
     val errorInputName: LiveData<Boolean>

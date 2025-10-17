@@ -38,6 +38,9 @@ android {
 
 dependencies {
 
+    implementation ("com.google.dagger:dagger:2.57.2")
+    ksp ("com.google.dagger:dagger-compiler:2.57.2")
+
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)

@@ -1,10 +1,11 @@
 package com.github.kolesovv.aisle.domain.usecase
 
 import com.github.kolesovv.aisle.domain.ItemRepository
+import javax.inject.Inject
 
-class DeleteItemUseCase(private val itemRepository: ItemRepository) {
+class DeleteItemUseCase @Inject constructor(private val itemRepository: ItemRepository) {
 
-    suspend fun invoke(itemId: Int) {
+    suspend operator fun invoke(itemId: Int) {
         itemRepository.deleteItem(itemId)
     }
 }

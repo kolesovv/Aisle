@@ -1,4 +1,4 @@
-package com.github.kolesovv.aisle.presentation
+package com.github.kolesovv.aisle.presentation.screens.shopItem
 
 import android.content.Context
 import android.content.Intent
@@ -11,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import com.github.kolesovv.aisle.R
 import com.github.kolesovv.aisle.domain.Item
+import com.github.kolesovv.aisle.presentation.ShopItemFragment
 
 class ShopItemActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedListener {
 
@@ -60,8 +61,8 @@ class ShopItemActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinished
 
     private fun launchMode() {
         val fragment = when (screenMode) {
-            MODE_ADD -> ShopItemFragment.newInstanceAddItem()
-            MODE_EDIT -> ShopItemFragment.newInstanceEditItem(shopItemId)
+            MODE_ADD -> ShopItemFragment.Companion.newInstanceAddItem()
+            MODE_EDIT -> ShopItemFragment.Companion.newInstanceEditItem(shopItemId)
             else -> throw RuntimeException("Param screen mode is absent")
         }
 
